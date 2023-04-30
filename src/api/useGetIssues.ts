@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { addIssues } from "../redux/slices/appSlice";
+import {
+  addIssues,
+  addLocalStorageIssues,
+  saveRepoLink,
+} from "../redux/slices/appSlice";
 import { useDispatch } from "react-redux";
+import { getStorageData } from "../utils/localStorageActions";
 
 const useGetIssues = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +22,9 @@ const useGetIssues = () => {
 
       setIsError(false);
       dispatch(addIssues(issues));
+      dispatch(saveRepoLink(inputLink));
+      
+      dispatch(addLocalStorageIssues(getStorageData(inputLink)));
 
       return issues;
     } catch (error) {

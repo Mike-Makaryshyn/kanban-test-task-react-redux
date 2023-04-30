@@ -20,7 +20,8 @@ const App = () => {
   const { getIssues, isLoading } = useGetIssues();
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const { todo, inProgress, done } = useSelector((state: any) => state.app);
+  const state = useSelector((state: any) => state.app);
+  const { todo, inProgress, done } = state;
 
   const dispatch = useDispatch();
 
@@ -51,7 +52,6 @@ const App = () => {
     const urlFromInput = `https://api.github.com/repos/${matches[1]}/${matches[2]}/issues`;
 
     await getIssues(urlFromInput);
-    setRepoInput("");
   };
 
   const handleExampleRepo = async (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -108,11 +108,11 @@ const App = () => {
         <div className="d-flex mt-1 me-4 mt-3 rounded w-100">
           {columns.map((column, idx) => (
             <div key={idx} className="issues_item">
-              <h2 className="fw-bold mb-4">{column.title}</h2>
+              <h3 className="fw-bold mb-4">{column.title}</h3>
               <Droppable droppableId={column.name}>
                 {(provided) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    <Column issues={column.issues} column={column.name} />
+                    <Column issues={column.issues} />
                   </div>
                 )}
               </Droppable>
