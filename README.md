@@ -2,5 +2,5 @@
 
 https://kanban-test-task-react-redux-typescript.vercel.app/
 
-Wes used: 
+Were used:
 React/ TS / Redux / RTK / react-beautiful-dnd / Boostrap / 
