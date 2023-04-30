@@ -5,11 +5,6 @@
   padding: 2rem;
 }
 
-.issues_wrapper {
-   display: flex;
-   justify-content: space-between;
-}
-
 .issues_item {
    padding: 2rem;
    max-width: 33%;
