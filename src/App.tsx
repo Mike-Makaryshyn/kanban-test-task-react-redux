@@ -4,13 +4,25 @@ import { useSelector } from "react-redux";
 import useGetIssues from "./api/useGetIssues";
 import Issues from "./components/Issues/Issues";
 
+import Button from "react-bootstrap/Button";
+
 import "./App.css";
 
 const TEST_LINK = "https://github.com/facebook/react";
 
 const App = () => {
-  const [repoInput, setRepoInput] = useState(TEST_LINK);
+  const [repoInput, setRepoInput] = useState("");
   const { getIssues, isLoading } = useGetIssues();
+
+  const todoes = useSelector((state: any) => state.app.todo);
+  const inProgress = useSelector((state: any) => state.app.inProgress);
+  const done = useSelector((state: any) => state.app.done);
+
+  const columns = [
+    { name: "todo", title: "Todo", issues: todoes },
+    { name: "in-progress", title: "In Progress", issues: inProgress },
+    { name: "done", title: "Done", issues: done },
+  ];
 
   const handleLoadClick = async () => {
     const regex = /github\.com\/(.+)\/(.+)/;
@@ -30,27 +42,40 @@ const App = () => {
     await getIssues(urlFromInput);
   };
 
-  const todoes = useSelector((state: any) => state.app.todo);
-  const inProgress = useSelector((state: any) => state.app.inProgress);
-  const done = useSelector((state: any) => state.app.done);
+  const pasteExampleRepo = async () => {
+    setRepoInput(() => TEST_LINK);
+  };
 
   return (
     <>
-      <div>
+      <div className="d-flex">
         <input
           type="text"
           value={repoInput}
           onChange={(e) => setRepoInput(e.target.value)}
+          className="form-control me-3"
         />
-        <button onClick={handleLoadClick} disabled={isLoading}>
+        <Button
+          className="w-100"
+          variant="primary"
+          onClick={handleLoadClick}
+          disabled={isLoading}
+        >
           {isLoading ? "Loading..." : "Load Issues"}
-        </button>
+        </Button>
       </div>
 
-      <div className="issues_wrapper">
-        <Issues issues={todoes} />
-        <Issues issues={inProgress} />
-        <Issues issues={done} />
+      <a href="#" onClick={pasteExampleRepo}>
+       Paste example repo
+      </a>
+
+      <div className="d-flex mt-4 me-4 p-4 rounded w-100">
+        {columns.map((column, idx) => (
+          <div key={idx} className="issues_item">
+            <h2 className="fw-bold mb-4">{column.title}</h2>
+            <Issues issues={column.issues} />
+          </div>
+        ))}
       </div>
     </>
   );

@@ -1,3 +1,5 @@
+import { dateTranform } from "../../utils/dateTransform";
+
 interface Issue {
   id: number;
   node_id: string;
@@ -6,7 +8,6 @@ interface Issue {
   assignees: [];
   created_at: Date;
   closed_at: null;
-  // Add other properties here as needed
 }
 
 interface IssuesProps {
@@ -18,29 +19,12 @@ const Issues = ({ issues }: IssuesProps) => {
     return <div>No issues found.</div>;
   }
 
-  const formatDate = (created_at: Date) => {
-    const createdAt = new Date(created_at);
-
-    const day =
-      createdAt.getDate() < 10
-        ? "0" + createdAt.getDate()
-        : createdAt.getDate();
-    const month =
-      createdAt.getMonth() + 1 < 10
-        ? "0" + (createdAt.getMonth() + 1)
-        : createdAt.getMonth() + 1;
-    const year = createdAt.getFullYear();
-
-    const date = `${day}.${month}.${year}`;
-    return date;
-  };
-
   const renderIssues = () => {
     return issues.map((issue) => {
-      const date = formatDate(issue.created_at);
+      const date = dateTranform(issue.created_at);
 
       return (
-        <div key={issue.id}>
+        <div key={issue.id} className="bg-white rounded p-3 mb-3 shadow-md issue">
           <h4>{issue.title}</h4>
           <p>{date}</p>
         </div>

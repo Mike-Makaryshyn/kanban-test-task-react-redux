@@ -23,7 +23,6 @@ const appSlice = createSlice({
   reducers: {
     addIssues: (state, action: PayloadAction<Issue[]>) => {
       action.payload.forEach((issue) => {
-        console.log(issue.state);
         if (issue.state === "open") {
           state.todo.push(issue);
         } else {
