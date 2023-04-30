@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Issue {
-  id: number;
-  state: "todo" | "inProgress" | "done";
+  node_id: string;
+  state: "todo" | "in-progress" | "done";
 }
 
 interface AppState {
@@ -27,19 +27,21 @@ const appSlice = createSlice({
     moveIssue: (
       state,
       action: PayloadAction<{
-        issueId: number;
+        issueId: number | string;
         fromColumn: "todo" | "inProgress" | "done";
         toColumn: "todo" | "inProgress" | "done";
         toIndex: number;
       }>
     ) => {
       const { issueId, fromColumn, toColumn, toIndex } = action.payload;
+
       const issueToMove = state[fromColumn].find(
-        (issue) => issue.id === issueId
+        (issue) => issue.node_id === issueId
       );
+
       if (issueToMove) {
         state[fromColumn] = state[fromColumn].filter(
-          (issue) => issue.id !== issueId
+          (issue) => issue.node_id !== issueId
         );
         state[toColumn].splice(toIndex, 0, issueToMove);
       }
