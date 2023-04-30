@@ -1,4 +1,4 @@
-import { dateTranform } from "../../utils/dateTransform";
+import { dateTransform } from "../../utils/dateTransform";
 
 interface Issue {
   id: number;
@@ -10,21 +10,25 @@ interface Issue {
   closed_at: null;
 }
 
-interface IssuesProps {
+interface ColumnProps {
   issues?: Issue[];
 }
 
-const Issues = ({ issues }: IssuesProps) => {
+const Column = ({ issues }: ColumnProps) => {
+   
   if (!issues || issues.length === 0) {
     return <div>No issues found.</div>;
   }
 
   const renderIssues = () => {
     return issues.map((issue) => {
-      const date = dateTranform(issue.created_at);
+      const date = dateTransform(issue.created_at);
 
       return (
-        <div key={issue.id} className="bg-white rounded p-3 mb-3 shadow-md issue">
+        <div
+          key={issue.id}
+          className="bg-white rounded p-3 mb-3 shadow-md issue"
+        >
           <h4>{issue.title}</h4>
           <p>{date}</p>
         </div>
@@ -37,4 +41,4 @@ const Issues = ({ issues }: IssuesProps) => {
   return <div>{renderedIssues}</div>;
 };
 
-export default Issues;
+export default Column;

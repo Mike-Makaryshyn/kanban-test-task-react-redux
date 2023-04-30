@@ -1,14 +1,14 @@
-export const dateTranform = (created_at: Date) => {
+export const dateTransform = (created_at: Date) => {
   const createdAt = new Date(created_at);
+  const now = new Date();
 
-  const day =
-    createdAt.getDate() < 10 ? "0" + createdAt.getDate() : createdAt.getDate();
-  const month =
-    createdAt.getMonth() + 1 < 10
-      ? "0" + (createdAt.getMonth() + 1)
-      : createdAt.getMonth() + 1;
-  const year = createdAt.getFullYear();
+  const diff = Math.abs(now.getTime() - createdAt.getTime());
+  const hoursDiff = Math.floor(diff / (1000 * 60 * 60));
+  const daysDiff = Math.floor(hoursDiff / 24);
 
-  const date = `${day}.${month}.${year}`;
-  return date;
+  if (daysDiff > 0) {
+    return `${daysDiff} day${daysDiff === 1 ? "" : "s"} ago`;
+  } else {
+    return `${hoursDiff} hour${hoursDiff === 1 ? "" : "s"} ago`;
+  }
 };

@@ -13,7 +13,6 @@ const useGetIssues = () => {
 
     try {
       const response = await fetch(inputLink);
-
       const issues = await response.json();
 
       setIsError(false);

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Issue {
   id: number;
-  state: "todo" | "inProgress" | "done" | "open";
+  state: "todo" | "inProgress" | "done";
 }
 
 interface AppState {
@@ -22,14 +22,7 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     addIssues: (state, action: PayloadAction<Issue[]>) => {
-      action.payload.forEach((issue) => {
-        if (issue.state === "open") {
-          state.todo.push(issue);
-        } else {
-          state.done.push(issue);
-          state.inProgress.push(issue);
-        }
-      });
+      state.todo = action.payload;
     },
     moveIssue: (
       state,

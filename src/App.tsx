@@ -2,25 +2,25 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 
 import useGetIssues from "./api/useGetIssues";
-import Issues from "./components/Issues/Issues";
+import Column from "./components/Column/Column";
 
 import Button from "react-bootstrap/Button";
-
 import "./App.css";
 
-const TEST_LINK = "https://github.com/facebook/react";
+const EXAMPLE_URL = "https://api.github.com/repos/facebook/react/issues";
 
 const App = () => {
   const [repoInput, setRepoInput] = useState("");
+  const [owner, setOwner] = useState("");
+  const [name, setName] = useState("");
   const { getIssues, isLoading } = useGetIssues();
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const todoes = useSelector((state: any) => state.app.todo);
-  const inProgress = useSelector((state: any) => state.app.inProgress);
-  const done = useSelector((state: any) => state.app.done);
+  const { todo, inProgress, done } = useSelector((state: any) => state.app);
 
   const columns = [
-    { name: "todo", title: "Todo", issues: todoes },
-    { name: "in-progress", title: "In Progress", issues: inProgress },
+    { name: "todo", title: "Todo", issues: todo },
+    { name: "inProgress", title: "In Progress", issues: inProgress },
     { name: "done", title: "Done", issues: done },
   ];
 
@@ -29,21 +29,28 @@ const App = () => {
     const matches = repoInput.match(regex);
 
     if (!matches || matches.length !== 3) {
-      console.log("Invalid URL");
+      setAlertMessage("Invalid URL");
+
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 2000);
+
       return;
     }
 
-    const owner = matches[1];
-    const name = matches[2];
+    setOwner(() => matches[1]);
+    setName(() => matches[2]);
 
-    // Construct API URL and fetch issues
-    const urlFromInput = `https://api.github.com/repos/${owner}/${name}/issues`;
+    const urlFromInput = `https://api.github.com/repos/${matches[1]}/${matches[2]}/issues`;
 
     await getIssues(urlFromInput);
   };
 
-  const pasteExampleRepo = async () => {
-    setRepoInput(() => TEST_LINK);
+  const handleExampleRepo = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOwner(() => "facebook");
+    setName(() => "react");
+    await getIssues(EXAMPLE_URL);
   };
 
   return (
@@ -65,18 +72,33 @@ const App = () => {
         </Button>
       </div>
 
-      <a href="#" onClick={pasteExampleRepo}>
-       Paste example repo
+      <a href="#" onClick={handleExampleRepo}>
+        Load facebook/react repo as an example
       </a>
 
-      <div className="d-flex mt-4 me-4 p-4 rounded w-100">
+      {owner && !alertMessage && (
+        <div className="mt-4" style={{ color: "#6274D3" }}>
+          {owner} {">"} {name}
+        </div>
+      )}
+
+      <div className="d-flex mt-1 me-4 mt-3 rounded w-100">
         {columns.map((column, idx) => (
           <div key={idx} className="issues_item">
             <h2 className="fw-bold mb-4">{column.title}</h2>
-            <Issues issues={column.issues} />
+            <Column issues={column.issues} />
           </div>
         ))}
       </div>
+
+      {alertMessage && (
+        <div
+          className="alert alert-danger position-absolute bottom-0 end-0 m-3"
+          style={{ zIndex: 100 }}
+        >
+          {alertMessage}
+        </div>
+      )}
     </>
   );
 };
