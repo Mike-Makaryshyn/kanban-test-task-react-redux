@@ -100,7 +100,13 @@ const App = () => {
 
       {owner && !alertMessage && (
         <div className="mt-4" style={{ color: "#6274D3" }}>
-          {owner} {">"} {name}
+          <a target="_blank" href={`https://github.com/${owner}`}>
+            {owner}
+          </a>{" "}
+          {">"}{" "}
+          <a target="_blank" href={`https://github.com/${owner}/${name}`}>
+            {name}
+          </a>
         </div>
       )}
 
