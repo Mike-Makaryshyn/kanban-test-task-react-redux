@@ -1,13 +1,13 @@
 import { Draggable } from "react-beautiful-dnd";
-import IssueItem from "../IssueItem/IssueItem";
+import IssueItem from "../IssueItem";
 import { IssueType } from "../IssueItem/IssueItem";
 
 interface ColumnProps {
-  issues?: IssueType[];
+  issues?: Issue[];
 }
 
 const Column = ({ issues }: ColumnProps) => {
-  if (!issues || issues.length === 0) {
+  if (!issues || issues.length === 0 || issues.length === undefined) {
     return <div>No issues found.</div>;
   }
 
