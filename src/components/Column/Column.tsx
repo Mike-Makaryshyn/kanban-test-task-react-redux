@@ -3,7 +3,7 @@ import IssueItem from "../IssueItem";
 import { IssueType } from "../IssueItem/IssueItem";
 
 interface ColumnProps {
-  issues?: Issue[];
+  issues?: IssueType[];
 }
 
 const Column = ({ issues }: ColumnProps) => {
