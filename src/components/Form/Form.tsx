@@ -15,7 +15,7 @@ const Form = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const regex = /github\.com\/(.+)\/(.+)/;
-    const matches = repoInput.match(regex);
+    const matches = repoInput.trim().match(regex);
 
     if (!matches || matches.length !== 3) {
       setAlertMessage("Invalid URL");
